@@ -27,11 +27,26 @@
       <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
     </ul>
+
+    
+
   </div>
 </template>
 
 <script>
 export default {
+    methods: {
+      getData() {
+        fetch("https://localhost:49153/WeatherForecast")
+          .then(res => res.json())
+          .then(data => console.log(data));
+      }
+    },
+    mounted() {
+      this.getData()
+    },
+
+
   name: 'HelloWorld',
   props: {
     msg: String
