@@ -16,6 +16,9 @@ RUN dotnet build "RoomReservationSystem.csproj" -c Release -o /app/build
 FROM build AS publish
 RUN dotnet publish "RoomReservationSystem.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
+# Wykonaj Database Update
+RUN dotnet ef database update --configuration Release
+
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .

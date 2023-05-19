@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using RoomReservationSystem;
+using RoomReservationSystem.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,6 +11,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDbContext<MyDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("RoomReservationDb")));
+
+builder.Services.AddScoped<RoomReservationApiSeeder>();
+
 builder.Services.AddCors(opt => opt.AddPolicy("CorsPolicy", builder =>
 {
     builder.WithOrigins("http://localhost:3000")
@@ -15,6 +24,10 @@ builder.Services.AddCors(opt => opt.AddPolicy("CorsPolicy", builder =>
 }));
 
 var app = builder.Build();
+
+var scope = app.Services?.CreateScope();
+var seeder = scope?.ServiceProvider.GetRequiredService<RoomReservationApiSeeder>();
+seeder?.Seed();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
