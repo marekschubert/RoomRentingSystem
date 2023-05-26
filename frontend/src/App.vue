@@ -1,26 +1,40 @@
-<template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+<template>  
+<div id="app" class="small-container">
+  <h3><b>ROOM RESERVATION SYSTEM</b></h3>
+  <nav class="navbar bg-dark navbar-dark navbar-expand-sm">
+      <div class="container">
+        <ul class="navbar-nav mr-auto">
+          <li id="floor_view" class="nav-item active">
+            <router-link class="nav-link">Floor view</router-link>
+          </li>
+          <li id="my_reservation" class="nav-item">
+            <router-link class="nav-link">My reservations</router-link>
+          </li>
+          <li id="invitations" class="nav-item">
+            <router-link class="nav-link">Invitations</router-link>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  <FloorView/>
+</div>
+
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import FloorView from './components/FloorView.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    FloorView
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+.small-container {
+  max-width: 810px; 
+  margin:30px;
+  }
 </style>
