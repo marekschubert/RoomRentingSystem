@@ -1,5 +1,5 @@
 <template>
-    <div class="tool_bar">       
+    <div class="tool_bar">     
     </div>    
     <div class="search_area">        
     </div>
@@ -33,6 +33,7 @@ export default {
         draw() {
             this.rooms.forEach((room) => {
                 const canvas = document.createElement("canvas");
+                canvas.setAttribute('ref', room.id);
                 canvas.id = room.id;
                 canvas.width = room.width;
                 canvas.height = room.height;                      
@@ -56,15 +57,7 @@ export default {
                     } else {
                         ctx.fillStyle = "#DC143C";
                     }
-                    ctx.fill();
-                    this.$refs.room_container.appendChild(canvas);
-                    const container = this.$refs.room_container;
-                    const rect = container.getBoundingClientRect();
-                    $(room.id).css({
-                        position:'absolute',
-                        top: rect.top + room.top,
-                        left: rect.left + room.left
-                    });                       
+                    ctx.fill();                                   
                 } else {                    
                     var movedTo = false;
                     room.crosses.forEach(cross => {
@@ -77,10 +70,14 @@ export default {
                         }
                     })
                     ctx.stroke();
-                    this.$refs.room_container.appendChild(canvas);
                 }
-            })
-            
+                this.$refs.room_container.appendChild(canvas);
+                const container = this.$refs.room_container;
+                const rect = container.getBoundingClientRect();                    
+                canvas.style.position = 'absolute';
+                canvas.style.top = rect.top + room.top + 'px';
+                canvas.style.left = rect.left + room.left + 'px'; 
+            })            
         },
         setDefaultColor(id) {
             var canvas = document.getElementById(id);
