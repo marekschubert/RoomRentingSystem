@@ -8,6 +8,6 @@
         public int RoomId { get; set; }
         public Room Room { get; set; }
 
-        public ICollection<User> Participants { get; set; }
+        public List<User> Participants { get; set; }
     }
 }

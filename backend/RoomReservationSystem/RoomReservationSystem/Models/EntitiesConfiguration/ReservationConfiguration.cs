@@ -16,6 +16,7 @@ namespace RoomReservationSystem.Models.EntitiesConfiguration
 
             builder.HasOne(res => res.Room)
                 .WithMany(room => room.Reservations);
+
         }
     }
 }
