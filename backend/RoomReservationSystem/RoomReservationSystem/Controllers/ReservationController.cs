@@ -28,5 +28,11 @@ namespace RoomReservationSystem.Controllers
             var reservations = _reservationService.GetByOrganizerId(id);
             return Ok(reservations);
         }
+
+        [HttpPost]
+        public ActionResult<int> AddReservation(Reservation reservation)
+        {
+
+        }
     }
 }
