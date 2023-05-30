@@ -1,8 +1,9 @@
-﻿namespace RoomReservationSystem.Models.Entities
+﻿using RoomReservationSystem.Models.Entities;
+
+namespace RoomReservationSystem.Models.Dto.CreationDto
 {
-    public class Reservation
+    public class CreateReservationDto
     {
-        public int Id { get; set; }
         public DateTime StartDateTime { get; set; }
         public DateTime EndDateTime { get; set; }
         public int RoomId { get; set; }
