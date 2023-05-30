@@ -28,6 +28,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<MyDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("RoomReservationDb")));
+/*
+if(Environment.GetEnvironmentVariable("DB_PASS"))
+    builder.Services.AddDbContext().*/
 
 builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddScoped<ILayerService, LayerService>();
