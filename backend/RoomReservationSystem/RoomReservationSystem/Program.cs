@@ -35,6 +35,9 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<RoomReservationApiSeeder>();
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
 builder.Services.AddCors(opt => opt.AddPolicy("CorsPolicy", builder =>
 {
     builder.WithOrigins("http://localhost:3000")

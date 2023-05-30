@@ -7,8 +7,6 @@ namespace RoomReservationSystem.Models.Dto.CreationDto
         public DateTime StartDateTime { get; set; }
         public DateTime EndDateTime { get; set; }
         public int RoomId { get; set; }
-        public Room Room { get; set; }
-
-        public List<User> Participants { get; set; }
+        public List<int> ParticipantsId { get; set; }
     }
 }

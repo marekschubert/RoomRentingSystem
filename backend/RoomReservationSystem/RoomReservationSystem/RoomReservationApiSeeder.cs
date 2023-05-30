@@ -25,24 +25,33 @@ namespace RoomReservationSystem
         {
             if (_dbContext.Database.CanConnect())
             {
+                _dbContext.Database.EnsureDeleted();
+                _dbContext.Database.EnsureCreated();
+                _dbContext.SaveChanges();
+                
                 if (!_dbContext.Layers.Any())
                 {
                     _dbContext.Layers.AddRange(_layers);
+                    _dbContext.SaveChanges();
                 }
                 if (!_dbContext.Rooms.Any())
                 {
                     _dbContext.Rooms.AddRange(_rooms);
+                    _dbContext.SaveChanges();
                 }
                 if (!_dbContext.Users.Any())
                 {
                     _dbContext.Users.AddRange(_users);
+                    _dbContext.SaveChanges();
                 }
                 if (!_dbContext.Reservations.Any())
                 {
                     _dbContext.Reservations.AddRange(_reservations);
+                    _dbContext.SaveChanges();
                 }
+                
 
-                _dbContext.SaveChanges();
+                // _dbContext.SaveChanges();
             }
         }
 
@@ -52,7 +61,7 @@ namespace RoomReservationSystem
             {
                 new User()
                 {
-                    Id = 1,
+                   // Id = 1,
                     FirstName = "John",
                     LastName = "Doe",
                     Email = "john.doe@gmail.com",
@@ -63,7 +72,7 @@ namespace RoomReservationSystem
                 },
                 new User()
                 {
-                    Id = 2,
+                    // Id = 2,
                     FirstName = "Michael",
                     LastName = "Smith",
                     Email = "michael.smith@gmail.com",
@@ -83,7 +92,7 @@ namespace RoomReservationSystem
             {
                 new Room()
                 {
-                    Id = 1,
+                    // Id = 1,
                     Number = 101,
                     Capacity = 5,
                     LayerId = 1,
@@ -91,7 +100,7 @@ namespace RoomReservationSystem
                 },
                 new Room()
                 {
-                    Id = 2,
+                    // Id = 2,
                     Number = 102,
                     Capacity = 10,
                     LayerId = 1,
@@ -99,7 +108,7 @@ namespace RoomReservationSystem
                 },
                 new Room()
                 {
-                    Id = 3,
+                    // Id = 3,
                     Number = 201,
                     Capacity = 8,
                     LayerId = 2,
@@ -127,23 +136,23 @@ namespace RoomReservationSystem
             {
                 new Reservation()
                 {
-                    Id = 1,
+                    // Id = 1,
                     StartDateTime = DateTime.Now.AddHours(1),
                     EndDateTime = DateTime.Now.AddHours(2),
                    // UserId = 1,
                    // User = _users[0],
-                    RoomId = 1,
+                  //  RoomId = 1,
                     Room = _rooms[0],
                     Participants = reservation1Participants
                 },
                 new Reservation()
                 {
-                    Id = 2,
+                    // Id = 2,
                     StartDateTime = DateTime.Now.AddHours(3),
                     EndDateTime = DateTime.Now.AddHours(4),
                    // UserId = 2,
                   //  User = _users[1],
-                    RoomId = 2,
+                  //  RoomId = 2,
                     Room = _rooms[1],
                     Participants = reservation2Participants
                 }
@@ -158,13 +167,13 @@ namespace RoomReservationSystem
             {
                 new Layer()
                 {
-                    Id = 1,
+                    // Id = 1,
                     Number = 1,
                     Rooms = new List<Room>()
                 },
                 new Layer()
                 {
-                    Id = 2,
+                    // Id = 2,
                     Number = 2,
                     Rooms = new List<Room>()
                 }
