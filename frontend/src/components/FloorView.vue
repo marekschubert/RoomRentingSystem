@@ -22,23 +22,15 @@ import $ from 'jquery'
 import Slider from 'bootstrap-slider'
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
-
+import roomData from "@/assets/rooms.json"
 export default {
     name: 'floor-view',
     components: { VueDatePicker },
     data() {
         return {
-            currentFloor: 1,
-            rooms: [
-                {id: "R1", available: 1, width: 180, height: 90, top: 10, left: 10, coordinates: [{x: 0, y:0}, {x:150, y:0}, {x: 180, y:90}, {x: 0, y:90}]},
-                {id: "R2", available: 1, width: 60, height: 90, top: 10, left: 220, coordinates: [{x: 0, y:0}, {x:60, y:0}, {x: 60, y:90}, {x: 0, y:90}]},
-                {id: "R3", available: 0, width: 60, height: 90, top: 10, left: 310, coordinates: [{x: 0, y:0}, {x:60, y:0}, {x: 60, y:90}, {x: 0, y:90}]},
-                {id: "R4", available: 0, width: 180, height: 60, top: 150, left: 10, coordinates: [{x: 0, y:0}, {x:180, y:0}, {x: 180, y:60}, {x: 0, y:150}]},
-                {id: "R5", available: 1, width: 150, height: 150, top: 150, left: 220, coordinates: [{x: 90, y:0}, {x:150, y:0}, {x: 150, y:150}, {x: 0, y:150}, {x: 0, y:90}, {x: 90, y:90}]},
-                {id: "R6", available: -1, width: 60, height: 90, top: 10, left: 400, coordinates: [{x: 0, y:0}, {x:60, y:0}, {x: 60, y:90}, {x: 0, y:90}, {x: 0, y:0}], crosses: [{x:0, y:0}, {x:60, y:90}, {x:60, y:0}, {x:0, y:90}]},
-                {id: "R7", available: -1, width: 180, height: 60, top: 240, left: 10, coordinates: [{x: 0, y:0}, {x:180, y:0}, {x: 180, y:60}, {x: 0, y:60}, {x: 0, y:0}], crosses: [{x:0, y:0}, {x:180, y:60}, {x: 180, y:0}, {x:0, y:60}]},
-                {id: "R8", available: -1, width: 60, height: 60, top: 150, left: 220, coordinates: [{x: 0, y:0}, {x:60, y:0}, {x: 60, y:60}, {x: 0, y:60}, {x: 0, y:0}], crosses: [{x:0, y:0}, {x:60, y:60}, {x:60, y:0}, {x:0, y:60}]},
-            ],
+            currentFloor: 1,            
+            layers: [],
+            rooms: [],
             date: new Date()
         }
     },  
@@ -48,10 +40,14 @@ export default {
         this.setupButtons();
     },
     methods: {
-        drawRooms() {  
-            this.rooms.forEach((room) => {
-                $('#' + room.id).remove();
-            })                
+        drawRooms() {              
+            this.layers = roomData.layers;
+            this.rooms = this.layers[this.currentFloor - 1].rooms;        
+            this.layers.forEach((layer) => {
+                layer.rooms.forEach((room) => {
+                    $('#' + room.id).remove();
+                })
+            })            
             this.rooms.forEach((room) => {
                 const canvas = document.createElement("canvas");
                 canvas.setAttribute('ref', room.id);
@@ -92,12 +88,10 @@ export default {
                     })
                     ctx.stroke();
                 }
-                this.$refs.room_container.appendChild(canvas);
-                const container = this.$refs.room_container;
-                const rect = container.getBoundingClientRect();                    
+                this.$refs.room_container.appendChild(canvas);                                         
                 canvas.style.position = 'absolute';
-                canvas.style.top = rect.top + room.top + 'px';
-                canvas.style.left = rect.left + room.left + 'px';                 
+                canvas.style.top = room.top + 'px';
+                canvas.style.left = room.left + 'px';                 
             })    
             var floorId = document.getElementById("floor_id");
             floorId.innerText = "Floor: " + this.currentFloor;  
@@ -131,29 +125,26 @@ export default {
                 document.getElementById("end_time").innerHTML = hour + ":" + minute;
             });  
         },
-        setupButtons() {
-            const container = this.$refs.room_container;
-            const rect = container.getBoundingClientRect();                    
+        setupButtons() {                         
             const button_before = document.getElementById("button_before")
             button_before.style.position = 'absolute';
-            button_before.style.top = rect.top + 330 + 'px';
-            button_before.style.left = rect.left + 350 + 'px';
+            button_before.style.bottom = '2px';
+            button_before.style.right = '120px';
             button_before.addEventListener('click', () => this.decreaseFloorNumber());
 
             const button_next = document.getElementById("button_next")
             button_next.style.position = 'absolute';
-            button_next.style.top = rect.top + 330 + 'px';
-            button_next.style.left = rect.left + 473 + 'px';
+            button_next.style.bottom = '2px';
+            button_next.style.right = '2px';
             button_next.addEventListener('click', () => this.increaseFloorNumber());
 
             const floor_id = document.getElementById("floor_id");
             floor_id.style.position = 'absolute';
-            floor_id.style.top = rect.top + 329 + 'px';
-            floor_id.style.left = rect.left + 427 + 'px';
-
+            floor_id.style.bottom = '-13px';
+            floor_id.style.right = '55px';
         },
         increaseFloorNumber() {
-            if (this.currentFloor < 3) {
+            if (this.currentFloor < 3) {                
                 this.currentFloor++
                 var floorId = document.getElementById("floor_id");
                 floorId.innerText = "Floor: " + this.currentFloor;
@@ -175,25 +166,27 @@ export default {
 <style src="@vueform/multiselect/themes/default.css"></style>
 <style>
 .tool_bar {
-    width: 810px;
+    position: relative;
     height: 90px;
     padding: 0px;    
     border: 1px solid rgb(222, 222, 222);
+    background-color: white;
 }
 .search_area {
+    position: relative;
     width: 270px;
     height: 360px;
-    padding: 0px;
-    border: 1px solid rgb(222, 222, 222);
+    padding: 0px;    
     display: block;
     float:left;
-    
+    background-color: white;
 }
 .floor_view {
+    position: relative;
     width: 540px;
     height: 360px;
     padding: 0px;
-    background-color:rgb(229, 227, 227);    
+    background-color:rgb(229, 227, 227);
     display: block;
     float:left;
 }
@@ -218,7 +211,6 @@ export default {
 .date_picker {
     width: 223px;
     display: inline-block;
-
 }
 .date_picker_label {
     margin: 20px;

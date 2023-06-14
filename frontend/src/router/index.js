@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import FloorView from '@/components/FloorView.vue'
 import Reservations from '@/components/Reservations.vue'
+import LoginForm from '@/components/Login.vue'
 
 const routes = [
   {
@@ -12,6 +13,11 @@ const routes = [
     path: '/reservations',
     name: 'Reservations',
     component: Reservations
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: LoginForm    
   },
 ]
 const router = createRouter({
