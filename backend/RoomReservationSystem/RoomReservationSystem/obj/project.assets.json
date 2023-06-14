@@ -3878,11 +3878,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\RoomRentingSystem\\backend\\RoomReservationSystem\\RoomReservationSystem\\RoomReservationSystem.csproj",
+      "projectUniqueName": "E:\\RoomRentingSystem\\backend\\RoomReservationSystem\\RoomReservationSystem\\RoomReservationSystem.csproj",
       "projectName": "RoomReservationSystem",
-      "projectPath": "D:\\RoomRentingSystem\\backend\\RoomReservationSystem\\RoomReservationSystem\\RoomReservationSystem.csproj",
+      "projectPath": "E:\\RoomRentingSystem\\backend\\RoomReservationSystem\\RoomReservationSystem\\RoomReservationSystem.csproj",
       "packagesPath": "C:\\Users\\mschu\\.nuget\\packages\\",
-      "outputPath": "D:\\RoomRentingSystem\\backend\\RoomReservationSystem\\RoomReservationSystem\\obj\\",
+      "outputPath": "E:\\RoomRentingSystem\\backend\\RoomReservationSystem\\RoomReservationSystem\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -3962,7 +3962,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
       }
     }
   }
