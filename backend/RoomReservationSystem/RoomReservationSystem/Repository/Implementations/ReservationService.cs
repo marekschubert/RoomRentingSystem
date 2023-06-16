@@ -26,9 +26,9 @@ namespace RoomReservationSystem.Repository.Implementations
             var room = _dbContext.Rooms.FirstOrDefault(r => r.Id == dto.RoomId);
             var participants = new List<User>();
 
-            foreach (var participantId in dto.ParticipantsId)
+            foreach (var participantEmail in dto.ParticipantsEmailAddresses)
             {
-                participants.Add(_dbContext.Users.FirstOrDefault(u => u.Id == participantId));
+                participants.Add(_dbContext.Users.FirstOrDefault(u => u.Email == participantEmail));
             }
 
             reservation.Room = room;

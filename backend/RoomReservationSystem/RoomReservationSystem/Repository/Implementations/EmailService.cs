@@ -36,7 +36,7 @@ namespace RoomReservationSystem.Repository.Implementations
 
             email.From.Add(MailboxAddress.Parse(_config.GetSection("EmailUsername").Value)); // TODO: fill with 'from' email address
             var emailAddressesToSend = _dbContext.Users
-                                .Where(u => reservationDto.ParticipantsId.Contains(u.Id))
+                                .Where(u => reservationDto.ParticipantsEmailAddresses.Contains(u.Email))
                                 .Select(u => u.Email)
                                 .ToList();
 
@@ -59,7 +59,7 @@ namespace RoomReservationSystem.Repository.Implementations
                 roomNumber,
                 reservationDto.StartDateTime,
                 timeSpan,
-                reservationDto.ParticipantsId.Count()
+                reservationDto.ParticipantsEmailAddresses.Count()
                 );
 
             email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = body };
