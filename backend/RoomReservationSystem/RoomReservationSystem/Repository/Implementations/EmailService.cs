@@ -19,45 +19,36 @@ namespace RoomReservationSystem.Repository.Implementations
             _dbContext = dbContext;
         }
 
-        public void SendEmail(EmailDto emailDto)
+        public void SendEmail(CreateReservationDto dto)
         {
-            var email = new MimeMessage();
-
-            email.From.Add(MailboxAddress.Parse(""));
-            foreach (var emailTo in emailDto.To)
-            {
-                email.To.Add(MailboxAddress.Parse(emailTo));
-            }
-            email.Subject = emailDto.Subject;
-            email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = emailDto.Body };
-
+            var email = CreateEmail(dto);
 
             using var smtp = new SmtpClient();
             smtp.Connect(_config.GetSection("EmailHost").Value, 587, MailKit.Security.SecureSocketOptions.StartTls);
             smtp.Authenticate(_config.GetSection("EmailUsername").Value, _config.GetSection("EmailPassword").Value);
             smtp.Send(email);
             smtp.Disconnect(true);
-
         }
 
-        private EmailDto CreateEmail(CreateReservationDto reservationDto)
+        private MimeMessage CreateEmail(CreateReservationDto reservationDto)
         {
-            var email = new EmailDto();
+            var email = new MimeMessage();
 
+            email.From.Add(MailboxAddress.Parse(_config.GetSection("EmailUsername").Value)); // TODO: fill with 'from' email address
             var emailAddressesToSend = _dbContext.Users
                                 .Where(u => reservationDto.ParticipantsId.Contains(u.Id))
                                 .Select(u => u.Email)
                                 .ToList();
-            email.To = emailAddressesToSend;
 
+            foreach (var emailTo in emailAddressesToSend)
+            {
+                email.To.Add(MailboxAddress.Parse(emailTo));
+            }
             email.Subject = "Zaproszenie na spotkanie";
 
             var room = _dbContext.Rooms.FirstOrDefault(r => r.Id == reservationDto.RoomId);
-
             var roomNumber = room != null ? room.Number : 0;
-
             var layer = _dbContext.Layers.FirstOrDefault(l => l.Id == room.LayerId);
-
             var layerNumber = layer != null ? layer.Number : 0;
 
             var timeSpan = reservationDto.EndDateTime - reservationDto.StartDateTime;
@@ -70,6 +61,7 @@ namespace RoomReservationSystem.Repository.Implementations
                 timeSpan,
                 reservationDto.ParticipantsId.Count()
                 );
+
             email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = body };
 
             return email;

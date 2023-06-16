@@ -37,6 +37,7 @@ namespace RoomReservationSystem.Controllers
         public ActionResult<int> AddReservation([FromBody] CreateReservationDto dto)
         {
             var createdId = _reservationService.AddReservation(dto);
+            _emailService.SendEmail(dto);
             return Created($"/api/reservation/{createdId}", null);
         }
     }
