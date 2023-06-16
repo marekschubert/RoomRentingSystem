@@ -70,7 +70,7 @@ namespace RoomReservationSystem.Repository.Implementations
                 timeSpan,
                 reservationDto.ParticipantsId.Count()
                 );
-            //email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = emailDto.Body };
+            email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = body };
 
             return email;
         }
