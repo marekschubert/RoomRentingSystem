@@ -9,7 +9,12 @@
         </div>
         <button id="button_find1" class="button_find">Find</button>        
     </div>    
-    <div class="search_area">          
+    <div class="room_info_area">   
+        <h4>Room information</h4>   
+        <p ref="room_number"></p>       
+        <p ref="room_availability"></p> 
+        <p ref="room_capacity"></p>     
+        <button ref="reserve_room_btn" class="button_find" style="display: none;" @click="reserveRoom">Reserve</button>
     </div>
     <div class="floor_view" ref="room_container" id="room_container">  
         <button id="button_before" class="button_find">&#60;</button>
@@ -28,7 +33,8 @@ export default {
     components: { VueDatePicker },
     data() {
         return {
-            currentFloor: 1,            
+            currentFloor: 1,  
+            currentRoom: null,          
             layers: [],
             rooms: [],
             date: new Date()
@@ -49,65 +55,100 @@ export default {
                 })
             })            
             this.rooms.forEach((room) => {
-                const canvas = document.createElement("canvas");
-                canvas.setAttribute('ref', room.id);
-                canvas.id = room.id;
-                canvas.width = room.width;
-                canvas.height = room.height;                      
-                var ctx = canvas.getContext("2d"); 
-                ctx.beginPath();                
-                var firstPoint = false;
-                room.coordinates.forEach(coordinate => {                    
-                    if (firstPoint == false) {
-                        ctx.moveTo(coordinate.x, coordinate.y);
-                        firstPoint = true;
-                    } else {
-                        ctx.lineTo(coordinate.x, coordinate.y);
-                    }
-                })
-                if (room.available >= 0) {
-                    if (room.available == 1) {
-                        ctx.fillStyle = "#6db193";
-                        canvas.addEventListener("mouseover", () => this.changeRoomsColor(room.id));
-                        canvas.addEventListener("mouseleave", () => this.setRoomsDefaultColor(room.id));                         
-                    } else {
-                        ctx.fillStyle = "#DC143C";
-                    }
-                    ctx.fill();      
-                    canvas.style.cursor = 'pointer';                             
-                } else {                    
-                    var movedTo = false;
-                    room.crosses.forEach(cross => {
-                        if (!movedTo) {
-                            ctx.moveTo(cross.x, cross.y);
-                            movedTo = true;
+                if (room.coordinates != undefined) {                                    
+                    const canvas = document.createElement("canvas");
+                    canvas.setAttribute('ref', room.id);
+                    canvas.id = room.id;
+                    canvas.width = room.width;
+                    canvas.height = room.height;                      
+                    var ctx = canvas.getContext("2d"); 
+                    ctx.beginPath();                
+                    var firstPoint = false;
+                    room.coordinates.forEach(coordinate => {                    
+                        if (firstPoint == false) {
+                            ctx.moveTo(coordinate.x, coordinate.y);
+                            firstPoint = true;
                         } else {
-                            ctx.lineTo(cross.x, cross.y);
-                            movedTo = false;
+                            ctx.lineTo(coordinate.x, coordinate.y);
                         }
                     })
-                    ctx.stroke();
-                }
-                this.$refs.room_container.appendChild(canvas);                                         
-                canvas.style.position = 'absolute';
-                canvas.style.top = room.top + 'px';
-                canvas.style.left = room.left + 'px';                 
+                    if (room.available >= 0) {
+                        canvas.room = room;
+                        if (room.available == 1) {
+                            ctx.fillStyle = "#6db193";
+                            canvas.addEventListener("mouseover", this.changeRoomsColor);
+                            canvas.addEventListener("mouseleave", this.setRoomsDefaultColor);
+                        } else {
+                            ctx.fillStyle = "#DC143C";
+                        }
+                        canvas.addEventListener("click", this.displayRoomsDetails);
+                        ctx.fill();      
+                        canvas.style.cursor = 'pointer';                             
+                    } else {                    
+                        var movedTo = false;
+                        room.crosses.forEach(cross => {
+                            if (!movedTo) {
+                                ctx.moveTo(cross.x, cross.y);
+                                movedTo = true;
+                            } else {
+                                ctx.lineTo(cross.x, cross.y);
+                                movedTo = false;
+                            }
+                        })
+                        ctx.stroke();
+                    }
+                    this.$refs.room_container.appendChild(canvas);                                         
+                    canvas.style.position = 'absolute';
+                    canvas.style.top = room.top + 'px';
+                    canvas.style.left = room.left + 'px';       
+                }          
             })    
             var floorId = document.getElementById("floor_id");
             floorId.innerText = "Floor: " + this.currentFloor;  
         },
-        setRoomsDefaultColor(id) {
-            var canvas = document.getElementById(id);
+        setRoomsDefaultColor(evt) {
+            var canvas = document.getElementById(evt.currentTarget.room.id);
             var ctx = canvas.getContext("2d"); 
             ctx.fillStyle = "#6db193";
             ctx.fill();
         },
-        changeRoomsColor(id) {
-            var canvas = document.getElementById(id);
+        changeRoomsColor(evt) {
+            var canvas = document.getElementById(evt.currentTarget.room.id);
             var ctx = canvas.getContext("2d"); 
             ctx.fillStyle = "#3a9679";
             ctx.fill();
         },   
+        displayRoomsDetails(evt) {
+            if (this.currentRoom != null && this.currentRoom.available == 1) {
+                var canvas = document.getElementById(this.currentRoom.id);
+                canvas.addEventListener("mouseover", this.changeRoomsColor);
+                canvas.addEventListener("mouseleave", this.setRoomsDefaultColor);  
+                canvas.dispatchEvent(new Event("mouseleave"));
+            }
+            var pickedRoom = evt.currentTarget.room;
+            if (pickedRoom.available == 1) {
+                canvas = document.getElementById(pickedRoom.id);
+                canvas.dispatchEvent(new Event("mouseover"));
+                canvas.removeEventListener("mouseover", this.changeRoomsColor);
+                canvas.removeEventListener("mouseleave", this.setRoomsDefaultColor);           
+            } 
+            this.currentRoom = pickedRoom;
+            this.$refs.room_number.innerHTML = "Number: " + pickedRoom.id;
+            this.$refs.room_capacity.innerHTML = "Capacity: " + pickedRoom.capacity + " persons";
+            if (pickedRoom.available == 1) {
+                this.$refs.room_availability.innerHTML = "Available: Yes";
+                this.$refs.reserve_room_btn.style.display = "block";
+            } else {
+                this.$refs.room_availability.innerHTML = "Available: No";
+                this.$refs.reserve_room_btn.style.display = "none";
+            }
+        },
+        clearRoomsDetails() {
+            this.$refs.room_number.innerHTML = "";
+            this.$refs.room_capacity.innerHTML = "";
+            this.$refs.room_availability.innerHTML = "";
+            this.$refs.reserve_room_btn.style.display = "none";
+        },
         createTimeSlider() {
             var s = new Slider("#ex16b", { id: 'ex16b', min: 420, max: 1020, step: 5, value: [420, 1020], tooltip: 'hide'});            
             s.on("slide", function(values) {
@@ -145,22 +186,36 @@ export default {
         },
         increaseFloorNumber() {
             if (this.currentFloor < 3) {                
-                this.currentFloor++
+                this.currentFloor++;
+                this.currentRoom = null;
+                this.clearRoomsDetails();
+                var floorId = document.getElementById("floor_id");
+                floorId.innerText = "Floor: " + this.currentFloor;
+                this.drawRooms()               
+            }
+        },
+        decreaseFloorNumber() {
+            if (this.currentFloor > 1) {
+                this.currentFloor--;
+                this.currentRoom = null;
+                this.clearRoomsDetails();
                 var floorId = document.getElementById("floor_id");
                 floorId.innerText = "Floor: " + this.currentFloor;
                 this.drawRooms()
             }
         },
-        decreaseFloorNumber() {
-            if (this.currentFloor > 1) {
-                this.currentFloor--
-                var floorId = document.getElementById("floor_id");
-                floorId.innerText = "Floor: " + this.currentFloor;
-                this.drawRooms()
-            }
+        reserveRoom() {
+            var reservationInfo = {"roomNumber": this.currentRoom.id,
+                                    "floorNumber": this.currentFloor,
+                                    "capacity": this.currentRoom.capacity,
+                                    "date": this.date.toISOString().split('T')[0],
+                                    "time": document.getElementById("start_time").innerHTML + " - " +
+                                            document.getElementById("end_time").innerHTML};                                    
+                               reservationInfo                 
+            localStorage.reservationInfo = JSON.stringify(reservationInfo);            
+            this.$emit('reserve-room');  
         }
     }
-  
 };
 </script>
 <style src="@vueform/multiselect/themes/default.css"></style>
@@ -172,13 +227,16 @@ export default {
     border: 1px solid rgb(222, 222, 222);
     background-color: white;
 }
-.search_area {
+.room_info_area {
     position: relative;
     width: 270px;
     height: 360px;
     padding: 0px;    
     display: block;
     float:left;
+    padding: 5px 30px;
+    line-height: 30px;
+    font-size: small;
     background-color: white;
 }
 .floor_view {
@@ -234,9 +292,6 @@ export default {
     line-height: 20px;
     padding: 6px 16px;
     text-align: center;
-    text-decoration: none;
-    user-select: none;
-    -webkit-user-select: none;
     touch-action: manipulation;
     vertical-align: middle;
     white-space: nowrap;

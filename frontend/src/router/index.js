@@ -1,23 +1,23 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import FloorView from '@/components/FloorView.vue'
-import Reservations from '@/components/Reservations.vue'
 import LoginForm from '@/components/Login.vue'
+import MyReservations from '@/components/MyReservations.vue'
 
 const routes = [
   {
     path: '/',
     name: 'FloorView',
-    component: FloorView
-  },
-  {
-    path: '/reservations',
-    name: 'Reservations',
-    component: Reservations
+    component: FloorView    
   },
   {
     path: '/login',
-    name: 'Login',
-    component: LoginForm    
+    name: "LoginForm",
+    component: LoginForm
+  },
+  {
+    path: '/reservations',
+    name: 'MyReservations',
+    component: MyReservations
   },
 ]
 const router = createRouter({
