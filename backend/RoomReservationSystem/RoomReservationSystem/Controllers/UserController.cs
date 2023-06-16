@@ -30,5 +30,12 @@ namespace RoomReservationSystem.Controllers
             return Ok(reservations);
         }
 
+        [HttpPost]
+        public ActionResult LoginOrRegister([FromBody] LoginRegisterDto dto)
+        {
+            _userService.LoginOrRegister(dto);
+            return Ok();
+        }
+
     }
 }

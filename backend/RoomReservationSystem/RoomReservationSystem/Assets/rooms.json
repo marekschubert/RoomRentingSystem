@@ -1,0 +1,142 @@
+{
+	"layers": [
+		{
+			"id": 1,
+			"rooms": [
+				{
+					"id": 1,
+					"capacity": 30,
+					"reservable": 1, "width": 180, "height": 90, "top": 10, "left": 10, "coordinates": [{"x": 0, "y":0}, {"x":150, "y":0}, {"x": 180, "y":90}, {"x": 0, "y":90}]				
+				}, 
+				{
+					"id": 2,
+					"capacity": 15,
+					"reservable": 1, "width": 60, "height": 90, "top": 10, "left": 220, "coordinates": [{"x": 0, "y":0}, {"x":60, "y":0}, {"x": 60, "y":90}, {"x": 0, "y":90}]
+				}, 
+				{
+					"id": 3,
+					"capacity": 15,
+					"reservable": 1, "width": 60, "height": 90, "top": 10, "left": 310, "coordinates": [{"x": 0, "y":0}, {"x":60, "y":0}, {"x": 60, "y":90}, {"x": 0, "y":90}]
+				}, 
+				{
+					"id": 4,
+					"capacity": 18,
+					"reservable": 1, "width": 180, "height": 60, "top": 150, "left": 10, "coordinates": [{"x": 0, "y":0}, {"x":180, "y":0}, {"x": 180, "y":60}, {"x": 0, "y":150}]
+				}, 
+				{
+					"id": 5,
+					"capacity": 30,
+					"reservable": 1, "width": 150, "height": 150, "top": 150, "left": 220, "coordinates": [{"x": 90, "y":0}, {"x":150, "y":0}, {"x": 150, "y":150}, {"x": 0, "y":150}, {"x": 0, "y":90}, {"x": 90, "y":90}]
+				
+				}, 
+				{
+					"id": 6,
+					"capacity": 0,
+					"reservable": -1, "width": 60, "height": 90, "top": 10, "left": 400, "coordinates": [{"x": 0, "y":0}, {"x":60, "y":0}, {"x": 60, "y":90}, {"x": 0, "y":90}, {"x": 0, "y":0}], "crosses": [{"x":0, "y":0}, {"x":60, "y":90}, {"x":60, "y":0}, {"x":0, "y":90}]
+				}, 
+				{
+					"id": 7,
+					"capacity": 0,
+					"reservable": -1, "width": 180, "height": 60, "top": 240, "left": 10, "coordinates": [{"x": 0, "y":0}, {"x":180, "y":0}, {"x": 180, "y":60}, {"x": 0, "y":60}, {"x": 0, "y":0}], "crosses": [{"x":0, "y":0}, {"x":180, "y":60}, {"x": 180, "y":0}, {"x":0, "y":60}]
+				}, 
+				{
+					"id": 8,
+					"capacity": 0,
+					"reservable": -1, "width": 60, "height": 60, "top": 150, "left": 220, "coordinates": [{"x": 0, "y":0}, {"x":60, "y":0}, {"x": 60, "y":60}, {"x": 0, "y":60}, {"x": 0, "y":0}], "crosses": [{"x":0, "y":0}, {"x":60, "y":60}, {"x":60, "y":0}, {"x":0, "y":60}]
+				}
+			]
+		},
+		{
+			"id": 2,
+			"rooms": [
+				{
+					"id": 9,
+					"capacity": 40,
+					"reservable": 1, "width": 300, "height": 90, "top": 10, "left": 180, "coordinates": [{"x": 0, "y":0}, {"x":300, "y":0}, {"x": 300, "y":90}, {"x": 0, "y":90}]				
+				}, 
+				{
+					"id": 10,
+					"capacity": 15,
+					"reservable": 1, "width": 60, "height": 150, "top": 150, "left": 40, "coordinates": [{"x": 0, "y":0}, {"x":60, "y":0}, {"x": 60, "y":150}, {"x": 0, "y":150}]
+				}, 
+				{
+					"id": 11,
+					"capacity": 15,
+					"reservable": 1, "width": 60, "height": 150, "top": 150, "left": 140, "coordinates": [{"x": 0, "y":0}, {"x":60, "y":0}, {"x": 60, "y":150}, {"x": 0, "y":150}]
+				}, 
+				{
+					"id": 12,
+					"capacity": 10,
+					"reservable": 1, "width": 60, "height": 60, "top": 150, "left": 240, "coordinates": [{"x": 0, "y":0}, {"x":60, "y":0}, {"x": 60, "y":60}, {"x": 0, "y":60}]
+				}, 
+				{
+					"id": 13,
+					"capacity": 10,
+					"reservable": 1, "width": 60, "height": 60, "top": 240, "left": 240, "coordinates": [{"x": 0, "y":0}, {"x":60, "y":0}, {"x": 60, "y":60}, {"x": 0, "y":60}]
+				
+				}, 
+				{
+					"id": 14,
+					"capacity": 10,
+					"reservable": 1, "width": 60, "height": 60, "top": 150, "left": 340, "coordinates": [{"x": 0, "y":0}, {"x":60, "y":0}, {"x": 60, "y":60}, {"x": 0, "y":60}]
+				}, 
+				{
+					"id": 15,
+					"capacity": 10,
+					"reservable": 1, "width": 60, "height": 60, "top": 240, "left": 340, "coordinates": [{"x": 0, "y":0}, {"x":60, "y":0}, {"x": 60, "y":60}, {"x": 0, "y":60}]
+				}, 
+				{
+					"id": 16,
+					"capacity": 0,
+					"reservable": -1, "width": 60, "height": 90, "top": 10, "left": 60, "coordinates": [{"x": 0, "y":0}, {"x":60, "y":0}, {"x": 60, "y":90}, {"x": 0, "y":90}, {"x": 0, "y":0}], "crosses": [{"x":0, "y":0}, {"x":60, "y":90}, {"x":60, "y":0}, {"x":0, "y":90}]
+				}
+			]
+		},
+		{
+			"id": 3,
+			"rooms": [
+				{
+					"id": 17,
+					"capacity": 60,
+					"reservable": 1, "width": 160, "height": 210, "top": 10, "left": 40, "coordinates": [{"x": 0, "y":0}, {"x":160, "y":0}, {"x": 160, "y":210}, {"x": 0, "y":210}]				
+				}, 
+				{
+					"id": 18,
+					"capacity": 10,
+					"reservable": 1, "width": 60, "height": 60, "top": 10, "left": 300, "coordinates": [{"x": 0, "y":0}, {"x":60, "y":0}, {"x": 60, "y":60}, {"x": 0, "y":60}]
+				}, 
+				{
+					"id": 19,
+					"capacity": 10,
+					"reservable": 1, "width": 60, "height": 60, "top": 10, "left": 390, "coordinates": [{"x": 0, "y":0}, {"x":60, "y":0}, {"x": 60, "y":60}, {"x": 0, "y":60}]
+				}, 
+				{
+					"id": 20,
+					"capacity": 25,
+					"reservable": 1, "width": 150, "height": 90, "top": 120, "left": 300, "coordinates": [{"x": 0, "y":0}, {"x":150, "y":0}, {"x": 150, "y":90}, {"x": 0, "y":90}]
+				}, 
+				{
+					"id": 21,
+					"capacity": 10,
+					"reservable": 1, "width": 60, "height": 60, "top": 260, "left": 40, "coordinates": [{"x": 0, "y":0}, {"x":60, "y":0}, {"x": 60, "y":60}, {"x": 0, "y":60}]
+				
+				}, 
+				{
+					"id": 22,
+					"capacity": 10,
+					"reservable": 1, "width": 60, "height": 60, "top": 260, "left": 140, "coordinates": [{"x": 0, "y":0}, {"x":60, "y":0}, {"x": 60, "y":60}, {"x": 0, "y":60}]
+				}, 
+				{
+					"id": 23,
+					"capacity": 0,
+					"reservable": -1, "width": 150, "height": 60, "top": 260, "left": 300, "coordinates": [{"x": 0, "y":0}, {"x":150, "y":0}, {"x": 150, "y":60}, {"x": 0, "y":60}, {"x": 0, "y": 0}], "crosses": [{"x": 0, "y": 0}, {"x": 150, "y": 60}, {"x": 150, "y": 0}, {"x": 0, "y": 60}]
+				}, 
+				{
+					"id": 24,
+					"capacity": 0,
+					"reservable": -1, "width": 60, "height": 60, "top": 150, "left": 220
+				}
+			]
+		}
+	]
+}

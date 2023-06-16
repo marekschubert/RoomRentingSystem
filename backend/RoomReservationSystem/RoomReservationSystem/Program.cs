@@ -35,6 +35,7 @@ if(Environment.GetEnvironmentVariable("DB_PASS"))
 builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddScoped<ILayerService, LayerService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddScoped<RoomReservationApiSeeder>();
 

@@ -11,10 +11,12 @@ namespace RoomReservationSystem.Controllers
     public class ReservationController : ControllerBase
     {
         private readonly IReservationService _reservationService;
+        private readonly IEmailService _emailService;
 
-        public ReservationController(IReservationService reservationService)
+        public ReservationController(IReservationService reservationService, IEmailService emailService)
         {
             _reservationService = reservationService;
+            _emailService = emailService;
         }
 
         [HttpGet]
