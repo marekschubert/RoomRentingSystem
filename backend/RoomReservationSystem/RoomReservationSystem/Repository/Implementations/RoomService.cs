@@ -6,7 +6,9 @@ namespace RoomReservationSystem.Repository.Implementations
     {
         public string GetRoomPositionData()
         {
-            string filePath = "\\Assets\\rooms.json";
+            //string filePath = "../Assets/rooms.json";
+            string fileName = "rooms.json";
+            string filePath = Path.Combine(Environment.CurrentDirectory, @"Assets\", fileName);
 
             if (!System.IO.File.Exists(filePath))
             {
