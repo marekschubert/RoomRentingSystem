@@ -25,13 +25,15 @@ namespace RoomReservationSystem.Repository.Implementations
         public void LoginOrRegister(LoginRegisterDto dto)
         {
             var user = _dbContext.Users.FirstOrDefault(u => u.Email == dto.Email);
-            if (user != null)
+            if (user == null)
             {
                 var newUser = new User()
                 {
                     Email = dto.Email,
                     FirstName = dto.FirstName,
                     LastName = dto.LastName,
+                    Password = "",
+                    Birthday = DateTime.MinValue,
                     AsMemberReservations = new List<Reservation>()
                 };
                 _dbContext.Users.Add(newUser);

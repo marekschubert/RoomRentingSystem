@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RoomReservationSystem.Repository.Interfaces;
 
 namespace RoomReservationSystem.Controllers
 {
@@ -7,20 +8,17 @@ namespace RoomReservationSystem.Controllers
     [ApiController]
     public class RoomController : ControllerBase
     {
+        private readonly IRoomService _roomService;
+        public RoomController(IRoomService roomService)
+        {
+            _roomService = roomService;
+        }
+
         [HttpGet]
         public IActionResult GetRoomPositionData()
         {
-            string filePath = "\\Assets\\rooms.json";
-
-            if (!System.IO.File.Exists(filePath))
-            {
-                return NotFound();
-            }
-
-            string jsonContent = System.IO.File.ReadAllText(filePath);
-
-            return Content(jsonContent, "application/json"); // Odpowiedź zawierająca treść pliku JSON jako odpowiedni typ MIME
-
+            string jsonContent = _roomService.GetRoomPositionData();
+            return Content(jsonContent, "application/json");
         }
     }
 }

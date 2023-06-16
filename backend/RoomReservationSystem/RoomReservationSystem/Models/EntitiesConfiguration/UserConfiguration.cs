@@ -13,7 +13,8 @@ namespace RoomReservationSystem.Models.EntitiesConfiguration
             builder.Property(u => u.FirstName).HasMaxLength(50).IsRequired();
             builder.Property(u => u.LastName).HasMaxLength(50).IsRequired();
             builder.Property(u => u.Email).HasMaxLength(50).IsRequired();
-            builder.Property(u => u.Password).HasMaxLength(50).IsRequired();
+            builder.Property(u => u.Password).HasMaxLength(50).IsRequired(false);
+            builder.Property(u => u.Birthday).IsRequired(false);
         }
     }
 }

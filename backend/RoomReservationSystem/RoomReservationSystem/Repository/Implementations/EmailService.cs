@@ -60,15 +60,17 @@ namespace RoomReservationSystem.Repository.Implementations
 
             var layerNumber = layer != null ? layer.Number : 0;
 
+            var timeSpan = reservationDto.EndDateTime - reservationDto.StartDateTime;
+
             var body = GenerateMeetingInvitationEmail(
-                "Spotkanie w biurze", 
-                layerNumber, 
-                roomNumber, 
+                "Spotkanie w biurze",
+                layerNumber,
+                roomNumber,
                 reservationDto.StartDateTime,
-                reservationDto.EndDateTime,
+                timeSpan,
                 reservationDto.ParticipantsId.Count()
-                )
-            email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = emailDto.Body };
+                );
+            //email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = emailDto.Body };
 
             return email;
         }

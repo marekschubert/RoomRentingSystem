@@ -12,7 +12,7 @@ using RoomReservationSystem.Models;
 namespace RoomReservationSystem.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20230519165518_Init")]
+    [Migration("20230616124202_Init")]
     partial class Init
     {
         /// <inheritdoc />
