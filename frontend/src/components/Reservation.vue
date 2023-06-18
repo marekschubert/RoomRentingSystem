@@ -21,7 +21,7 @@
                 />
         </div>
         <div class="button_area">
-            <button type="button" class="btn btn-primary" style="background-color: rgb(47, 97, 212);">Confirm</button>
+            <button type="button" class="btn btn-primary" style="background-color: rgb(47, 97, 212);" @click="confirmReservation">Confirm</button>
             <button type="button" class="btn btn-primary" style="background-color: rgb(173, 29, 29);" @click="cancelReservation">Cancel</button>
         </div>
     </div>    
@@ -38,13 +38,27 @@ export default {
     data() {
         return {
             participantList: [],
-            userList: []
+            userList: [],
+            startDT: new Date(),
+            endDT: new Date(),
+            roomId: 1
         };
     },  
     methods: {
+        async updateUserList() {
+            var users = []
+            await fetch("https://localhost:44346/api/user")
+            .then((response) => response.json())
+            .then((data) => {
+                data.forEach((user) => {                    
+                    users.push({FirstName: user.firstName, LastName: user.lastName, Email: user.email});                                        
+                })                                      
+            });                
+            localStorage.users = JSON.stringify(users);     
+        },
         displayReservationInfo() {                                             
             if (localStorage.reservationInfo != null && localStorage.users != null) {
-                const users = JSON.parse(localStorage.users);                
+                const users = JSON.parse(localStorage.users);                       
                 users.forEach((user) => {
                     if (user.Email != localStorage.Email) {
                         this.userList.push({value: user.Email, label: user.FirstName + " " + user.LastName});
@@ -56,16 +70,36 @@ export default {
                 this.$refs.capacity.innerHTML = "Capacity: " + reservation.capacity;
                 this.$refs.date.innerHTML = "Date: " + reservation.date;
                 this.$refs.time.innerHTML = "Time: " + reservation.time;
-                this.$refs.organizers_name.innerHTML = "Organizer: " + localStorage.name;
-            }
+                this.$refs.organizers_name.innerHTML = "Organizer: " + localStorage.FirstName + ' ' + localStorage.LastName;
+                this.startDT = new Date(reservation.startDT);
+                this.startDT.setHours(this.startDT.getHours() + 2);
+                this.endDT = new Date(reservation.endDT);
+                this.endDT.setHours(this.endDT.getHours() + 2);
+                this.roomId = reservation.roomNumber;
+            }                          
+        },
+        async confirmReservation() {   
+            this.participantList.push(localStorage.Email);
+            console.log(this.participantList);
+            var reservation = {"startDateTime": this.startDT,"endDateTime": this.endDT,"roomId": this.roomId,"participantsEmailAddresses": this.participantList};
+            const requestOptions = {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(reservation)                
+            };
+            const res = await fetch("https://localhost:44346/api/reservation", requestOptions);
+            localStorage.activeTab = 1;
+            this.$emit('set-as-active-tab', 1);                 
+            this.$router.push("/reservations").then(() => { this.$router.go() });                
         },
         cancelReservation() {
             localStorage.activeTab = 0;
             this.$emit('set-as-active-tab', 0);                 
             this.$emit('return-to-floor-view');      
-        },        
+        },                
     },
     mounted() {
+        this.updateUserList();
         this.displayReservationInfo();
     }
 }

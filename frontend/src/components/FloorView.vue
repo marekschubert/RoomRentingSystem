@@ -3,11 +3,11 @@
         <p class="date_picker_label">Pick a date:</p>
         <VueDatePicker class="date_picker" v-model="date" :enable-time-picker="false"></VueDatePicker>                 
         <div ref="slider" class="slider">            
-            <p id="start_time" class="start_time">7:00</p>
+            <p id="start_time" class="start_time">07:00</p>
             <input id="ex16b" type="text"/>
             <p id="end_time" class="end_time">17:00</p>
         </div>
-        <button id="button_find1" class="button_find">Find</button>        
+        <button id="button_find1" class="button_find" @click="drawRooms">Find</button>        
     </div>    
     <div class="room_info_area">   
         <h4>Room information</h4>   
@@ -15,6 +15,7 @@
         <p ref="room_availability"></p> 
         <p ref="room_capacity"></p>     
         <button ref="reserve_room_btn" class="button_find" style="display: none;" @click="reserveRoom">Reserve</button>
+        <p ref="room_reserved_times"></p>
     </div>
     <div class="floor_view" ref="room_container" id="room_container">  
         <button id="button_before" class="button_find">&#60;</button>
@@ -27,7 +28,6 @@ import $ from 'jquery'
 import Slider from 'bootstrap-slider'
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
-import roomData from "@/assets/rooms.json"
 export default {
     name: 'floor-view',
     components: { VueDatePicker },
@@ -37,23 +37,70 @@ export default {
             currentRoom: null,          
             layers: [],
             rooms: [],
-            date: new Date()
+            date: new Date(),
+            startDT: new Date(),
+            endDT: new Date()
         }
     },  
     mounted() {
-        this.drawRooms();
+        this.getRoomData();
         this.createTimeSlider();
         this.setupButtons();
+        this.drawRooms();                
     },
     methods: {
-        drawRooms() {              
-            this.layers = roomData.layers;
-            this.rooms = this.layers[this.currentFloor - 1].rooms;        
-            this.layers.forEach((layer) => {
-                layer.rooms.forEach((room) => {
-                    $('#' + room.id).remove();
+        async getRoomData() {
+            if (localStorage.roomData == null) {
+                await fetch("https://localhost:44346/api/Room")
+                        .then((response) => response.json())
+                        .then((data) => {
+                            localStorage.roomData = JSON.stringify(data);                                    
+                        });
+            }            
+        },
+        async drawRooms() {    
+            this.clearRoomsDetails();
+            const roomData = JSON.parse(localStorage.roomData);            
+            this.layers = roomData.layers;                    
+            this.layers.forEach((layer) => {                
+                layer.rooms.forEach((room) => {                    
+                    $('#' + room.id).remove();                    
+                    if (room.reservable != -1) {
+                        room.reservable = 1;
+                    }
                 })
-            })            
+            })        
+            this.rooms = this.layers[this.currentFloor - 1].rooms;                    
+            this.startDT = new Date(this.date);    
+            var startTime = document.getElementById("start_time").innerHTML;            
+            this.startDT.setHours(startTime.substring(0, 2), startTime.substring(3, 5), 0);  
+            
+            this.endDT = new Date(this.date);    
+            var endTime = document.getElementById("end_time").innerHTML;
+            this.endDT.setHours(endTime.substring(0, 2), endTime.substring(3, 5), 0);  
+            var reservations;  
+            
+            await fetch("https://localhost:44346/api/reservation")
+                    .then((response) => response.json())
+                    .then((data) => {
+                        reservations = data;                                    
+                    });
+            var reservationStartDT, reservationEndDT;
+            reservations.forEach((item) => {
+                reservationStartDT = new Date(item.reservationData.startDateTime);
+                reservationEndDT = new Date(item.reservationData.endDateTime);       
+                if (reservationStartDT < this.endDT && reservationEndDT > this.startDT) {                    
+                    this.rooms.forEach((room) => {
+                        if (room.id == item.roomData.id) {
+                            room.reservable = 0;
+                            if (room.reservedTimes == null) {
+                                room.reservedTimes = []
+                            }
+                            room.reservedTimes.push(item.reservationData.startDateTime.substring(11, 16) + ' - ' + item.reservationData.endDateTime.substring(11, 16));                            
+                        }
+                    })
+                }                
+            });                 
             this.rooms.forEach((room) => {
                 if (room.coordinates != undefined) {                                    
                     const canvas = document.createElement("canvas");
@@ -72,14 +119,14 @@ export default {
                             ctx.lineTo(coordinate.x, coordinate.y);
                         }
                     })
-                    if (room.available >= 0) {
+                    if (room.reservable >= 0) {
                         canvas.room = room;
-                        if (room.available == 1) {
+                        if (room.reservable == 1) {
                             ctx.fillStyle = "#6db193";
                             canvas.addEventListener("mouseover", this.changeRoomsColor);
                             canvas.addEventListener("mouseleave", this.setRoomsDefaultColor);
                         } else {
-                            ctx.fillStyle = "#DC143C";
+                            ctx.fillStyle = "#DC143C";                            
                         }
                         canvas.addEventListener("click", this.displayRoomsDetails);
                         ctx.fill();      
@@ -119,14 +166,14 @@ export default {
             ctx.fill();
         },   
         displayRoomsDetails(evt) {
-            if (this.currentRoom != null && this.currentRoom.available == 1) {
+            if (this.currentRoom != null && this.currentRoom.reservable == 1) {
                 var canvas = document.getElementById(this.currentRoom.id);
                 canvas.addEventListener("mouseover", this.changeRoomsColor);
                 canvas.addEventListener("mouseleave", this.setRoomsDefaultColor);  
                 canvas.dispatchEvent(new Event("mouseleave"));
             }
             var pickedRoom = evt.currentTarget.room;
-            if (pickedRoom.available == 1) {
+            if (pickedRoom.reservable == 1) {
                 canvas = document.getElementById(pickedRoom.id);
                 canvas.dispatchEvent(new Event("mouseover"));
                 canvas.removeEventListener("mouseover", this.changeRoomsColor);
@@ -135,31 +182,43 @@ export default {
             this.currentRoom = pickedRoom;
             this.$refs.room_number.innerHTML = "Number: " + pickedRoom.id;
             this.$refs.room_capacity.innerHTML = "Capacity: " + pickedRoom.capacity + " persons";
-            if (pickedRoom.available == 1) {
-                this.$refs.room_availability.innerHTML = "Available: Yes";
+            if (pickedRoom.reservable == 1) {
+                this.$refs.room_availability.innerHTML = "Reservable: Yes";
                 this.$refs.reserve_room_btn.style.display = "block";
+                this.$refs.room_reserved_times.innerHTML = "";
             } else {
-                this.$refs.room_availability.innerHTML = "Available: No";
+                this.$refs.room_availability.innerHTML = "Reservable: No";
                 this.$refs.reserve_room_btn.style.display = "none";
+                this.$refs.room_reserved_times.innerHTML = "Reserved times: <br>";
+                this.currentRoom.reservedTimes.forEach((time) => {
+                    this.$refs.room_reserved_times.innerHTML += "&emsp;" + time + "<br>";
+                });
             }
         },
         clearRoomsDetails() {
             this.$refs.room_number.innerHTML = "";
             this.$refs.room_capacity.innerHTML = "";
-            this.$refs.room_availability.innerHTML = "";
+            this.$refs.room_availability.innerHTML = "";        
             this.$refs.reserve_room_btn.style.display = "none";
+            this.$refs.room_reserved_times.innerHTML = "";
         },
         createTimeSlider() {
             var s = new Slider("#ex16b", { id: 'ex16b', min: 420, max: 1020, step: 5, value: [420, 1020], tooltip: 'hide'});            
             s.on("slide", function(values) {
                 var hour = Math.trunc(values[0] / 60);
                 var minute = values[0] % 60;
+                if (hour < 10) {
+                    hour = '0' + hour;
+                }
                 if (minute < 10) {
                     minute = '0' + minute;
                 }
                 document.getElementById("start_time").innerHTML = hour + ":" + minute;
                 hour = Math.trunc(values[1] / 60);
                 minute = values[1] % 60;
+                if (hour < 10) {
+                    hour = '0' + hour;
+                }
                 if (minute < 10) {
                     minute = '0' + minute;
                 }
@@ -210,8 +269,9 @@ export default {
                                     "capacity": this.currentRoom.capacity,
                                     "date": this.date.toISOString().split('T')[0],
                                     "time": document.getElementById("start_time").innerHTML + " - " +
-                                            document.getElementById("end_time").innerHTML};                                    
-                               reservationInfo                 
+                                            document.getElementById("end_time").innerHTML,
+                                    "startDT": this.startDT,
+                                    "endDT": this.endDT};                                                                                  
             localStorage.reservationInfo = JSON.stringify(reservationInfo);            
             this.$emit('reserve-room');  
         }
@@ -253,7 +313,7 @@ export default {
 }
 .start_time {
     margin-left: 20px;
-    margin-right: 20px;
+    margin-right: 25px;
     margin-top: 10px;
     width: 30px;
     display: inline-block;

@@ -15,8 +15,7 @@
       <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">        
         </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a class="dropdown-item" href="#">My Profile</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">          
           <a class="dropdown-item" href="#" @click="changeLoginStatus(0)">Log Out</a>
         </div>
       </div>
@@ -80,23 +79,19 @@ export default {
       returnToFloorView() {
         this.$refs.reservation_page.style.display = "none";      
         this.$refs.router_view.style.display = "block";
-      }      
+      },            
   },
   mounted() {
         if (localStorage.user_logged_in === null) {
           localStorage.user_logged_in = 0;
         }
         this.changeLoginStatus(localStorage.user_logged_in);       
-        this.setAsActiveTab(localStorage.activeTab);        
-        if (localStorage.users === null) {
-          var users = [{FirstName: "Hien", LastName: "Le", Email: "actionboyvn@gmail.com"}, {FirstName: "Marek", LastName: "Schubert", Email: "marek@gmail.com"},
-                        {FirstName: "Adam", LastName: "Kowalik", Email: "adam@gmail.com"}];          
-          localStorage.users = JSON.stringify(users);        
-        }        
+        this.setAsActiveTab(localStorage.activeTab);             
+        
         if (localStorage.myReservations == null) {
           var myReservations = [{RoomId: 1, FloorId: 1, StartDateTime: "2023-06-16 7:00", EndDateTime: "2023-06-16 9:15", Participants: ["Hien Le", "Marek Schubert"]},
                                 {RoomId: 15, FloorId: 2, StartDateTime: "2023-07-03 15:10", EndDateTime: "2023-07-03 16:15", Participants: ["Hien Le", "Adam Kowalik"]}
-        ]
+                              ]
           localStorage.myReservations = JSON.stringify(myReservations);
         }
         this.$refs.reservation_page.style.display = "none";       
