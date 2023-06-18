@@ -49,9 +49,6 @@ namespace RoomReservationSystem
                     _dbContext.Reservations.AddRange(_reservations);
                     _dbContext.SaveChanges();
                 }
-                
-
-                // _dbContext.SaveChanges();
             }
         }
 
@@ -61,25 +58,21 @@ namespace RoomReservationSystem
             {
                 new User()
                 {
-                   // Id = 1,
                     FirstName = "John",
                     LastName = "Doe",
                     Email = "john.doe@gmail.com",
                     Password = "Pass123,./",
                     Birthday = new DateTime(1990, 1, 1),
                     AsMemberReservations = new List<Reservation>(),
-                   // AsOrganizerReservations = new List<Reservation>()
                 },
                 new User()
                 {
-                    // Id = 2,
                     FirstName = "Michael",
                     LastName = "Smith",
                     Email = "michael.smith@gmail.com",
                     Password = "Pass123,./",
                     Birthday = new DateTime(1995, 5, 5),
                     AsMemberReservations = new List<Reservation>(),
-                   // AsOrganizerReservations = new List<Reservation>()
                 }
             };
 
@@ -90,32 +83,31 @@ namespace RoomReservationSystem
         {
             var rooms = new List<Room>()
             {
-                new Room()
-                {
-                    // Id = 1,
-                    Number = 101,
-                    Capacity = 5,
-                    LayerId = 1,
-                    Reservations = new List<Reservation>()
-                },
-                new Room()
-                {
-                    // Id = 2,
-                    Number = 102,
-                    Capacity = 10,
-                    LayerId = 1,
-                    Reservations = new List<Reservation>()
-                },
-                new Room()
-                {
-                    // Id = 3,
-                    Number = 201,
-                    Capacity = 8,
-                    LayerId = 2,
-                    Reservations = new List<Reservation>()
-                }
+                new Room() { Number = 101, Capacity = 30, LayerId = 1, Reservations = new List<Reservation>() },
+                new Room() { Number = 102, Capacity = 15, LayerId = 1, Reservations = new List<Reservation>() },
+                new Room() { Number = 103, Capacity = 15, LayerId = 1, Reservations = new List<Reservation>() },
+                new Room() { Number = 104, Capacity = 18, LayerId = 1, Reservations = new List<Reservation>() },
+                new Room() { Number = 105, Capacity = 30, LayerId = 1, Reservations = new List<Reservation>() },
+                new Room() { Number = 106, Capacity = 0, LayerId = 1, Reservations = new List<Reservation>() },
+                new Room() { Number = 107, Capacity = 0, LayerId = 1, Reservations = new List<Reservation>() },
+                new Room() { Number = 108, Capacity = 0, LayerId = 1, Reservations = new List<Reservation>() },
+                new Room() { Number = 201, Capacity = 40, LayerId = 2, Reservations = new List<Reservation>() },
+                new Room() { Number = 202, Capacity = 15, LayerId = 2, Reservations = new List<Reservation>() },
+                new Room() { Number = 203, Capacity = 15, LayerId = 2, Reservations = new List<Reservation>() },
+                new Room() { Number = 204, Capacity = 10, LayerId = 2, Reservations = new List<Reservation>() },
+                new Room() { Number = 205, Capacity = 10, LayerId = 2, Reservations = new List<Reservation>() },
+                new Room() { Number = 206, Capacity = 10, LayerId = 2, Reservations = new List<Reservation>() },
+                new Room() { Number = 207, Capacity = 10, LayerId = 2, Reservations = new List<Reservation>() },
+                new Room() { Number = 208, Capacity = 0, LayerId = 2, Reservations = new List<Reservation>() },
+                new Room() { Number = 301, Capacity = 60, LayerId = 3, Reservations = new List<Reservation>() },
+                new Room() { Number = 302, Capacity = 10, LayerId = 3, Reservations = new List<Reservation>() },
+                new Room() { Number = 303, Capacity = 10, LayerId = 3, Reservations = new List<Reservation>() },
+                new Room() { Number = 304, Capacity = 25, LayerId = 3, Reservations = new List<Reservation>() },
+                new Room() { Number = 305, Capacity = 10, LayerId = 3, Reservations = new List<Reservation>() },
+                new Room() { Number = 306, Capacity = 10, LayerId = 3, Reservations = new List<Reservation>() },
+                new Room() { Number = 307, Capacity = 0, LayerId = 3, Reservations = new List<Reservation>() },
+                new Room() { Number = 308, Capacity = 0, LayerId = 3, Reservations = new List<Reservation>() }
             };
-
             return rooms;
         }
 
@@ -139,9 +131,6 @@ namespace RoomReservationSystem
                     // Id = 1,
                     StartDateTime = DateTime.Now.AddHours(1),
                     EndDateTime = DateTime.Now.AddHours(2),
-                   // UserId = 1,
-                   // User = _users[0],
-                  //  RoomId = 1,
                     Room = _rooms[0],
                     Participants = reservation1Participants
                 },
@@ -150,9 +139,6 @@ namespace RoomReservationSystem
                     // Id = 2,
                     StartDateTime = DateTime.Now.AddHours(3),
                     EndDateTime = DateTime.Now.AddHours(4),
-                   // UserId = 2,
-                  //  User = _users[1],
-                  //  RoomId = 2,
                     Room = _rooms[1],
                     Participants = reservation2Participants
                 }
@@ -167,14 +153,17 @@ namespace RoomReservationSystem
             {
                 new Layer()
                 {
-                    // Id = 1,
                     Number = 1,
                     Rooms = new List<Room>()
                 },
                 new Layer()
                 {
-                    // Id = 2,
                     Number = 2,
+                    Rooms = new List<Room>()
+                },
+                new Layer()
+                {
+                    Number = 3,
                     Rooms = new List<Room>()
                 }
             };
