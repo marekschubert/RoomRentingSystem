@@ -8,8 +8,9 @@ namespace RoomReservationSystem.Repository.Implementations
         {
             //string filePath = "../Assets/rooms.json";
             string fileName = "rooms.json";
-            string filePath = Path.Combine(Environment.CurrentDirectory, @"Assets\", fileName);
-
+            //string filePath = Path.Combine(Environment.CurrentDirectory, @"Assets\", fileName);
+            string filePath = Path.Combine(Environment.CurrentDirectory, @"Assets", fileName);
+            Console.WriteLine(filePath);
             if (!System.IO.File.Exists(filePath))
             {
                 return null;

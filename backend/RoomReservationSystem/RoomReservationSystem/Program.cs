@@ -59,14 +59,11 @@ var scope = app.Services?.CreateScope();
 var seeder = scope?.ServiceProvider.GetRequiredService<RoomReservationApiSeeder>();
 seeder?.Seed();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
-app.UseHttpsRedirection();
+app.UseSwagger();
+app.UseSwaggerUI();
+
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
