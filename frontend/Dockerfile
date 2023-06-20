@@ -12,5 +12,7 @@ RUN npm install
 # copy project files and folders to the current working directory (i.e. 'app' folder)
 COPY . .
 
+ENV BACKEND_PORT=43023
+
 EXPOSE 8080
 CMD [ "npm", "run", "serve" ]

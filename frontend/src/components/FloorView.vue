@@ -51,7 +51,7 @@ export default {
     methods: {
         async getRoomData() {
             if (localStorage.roomData == null) {
-                await fetch("https://localhost:44346/api/Room")
+                await fetch("http://localhost:43023/api/Room")
                         .then((response) => response.json())
                         .then((data) => {
                             localStorage.roomData = JSON.stringify(data);                                    
@@ -80,7 +80,7 @@ export default {
             this.endDT.setHours(endTime.substring(0, 2), endTime.substring(3, 5), 0);  
             var reservations;  
             
-            await fetch("https://localhost:44346/api/reservation")
+            await fetch("http://localhost:43023/api/reservation")
                     .then((response) => response.json())
                     .then((data) => {
                         reservations = data;                                    

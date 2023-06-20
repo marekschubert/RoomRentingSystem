@@ -22,7 +22,7 @@ export default {
     methods: {        
         async displayReservations() {
             var reservations;  
-            await fetch("https://localhost:44346/api/reservation")
+            await fetch("http://localhost:43023/api/reservation")
                     .then((response) => response.json())
                     .then((data) => {
                         reservations = data;                                    

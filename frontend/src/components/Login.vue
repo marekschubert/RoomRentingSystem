@@ -1,4 +1,7 @@
 <template>
+    <div>
+        {{ port }}
+    </div>
     <div class="login_page">       
         <div ref="login_form" class="login_form">
             <h2 style="margin: 7%;">Welcome back</h2>                                        
@@ -14,11 +17,11 @@ export default {
     name: 'login-form',
     data() {
     return {
-
+        port: process.env.BACKEND_PORT
     }
     },
     methods: {
-        async loginCallback(response){
+        async loginCallback(response){            
             const userData = decodeCredential(response.credential);   
             var user = {"firstName": userData.given_name, "lastName": userData.family_name, "email": userData.email};
             const requestOptions = {
@@ -26,7 +29,7 @@ export default {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(user)                
             };
-            const res = await fetch("https://localhost:44346/api/user", requestOptions);
+            const res = await fetch("http://localhost:43023/api/user", requestOptions);
             localStorage.FirstName = userData.given_name;
             localStorage.LastName = userData.family_name;
             localStorage.Email = userData.email;       
@@ -36,6 +39,8 @@ export default {
         },
     },         
     mounted() {
+        const myVariable = process.env.BACKEND_PORT;
+        console.log(myVariable);
     }   
 }
 </script>

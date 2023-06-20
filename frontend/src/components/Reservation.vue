@@ -47,7 +47,7 @@ export default {
     methods: {
         async updateUserList() {
             var users = []
-            await fetch("https://localhost:44346/api/user")
+            await fetch("http://localhost:43023/api/user")
             .then((response) => response.json())
             .then((data) => {
                 data.forEach((user) => {                    
@@ -87,7 +87,7 @@ export default {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(reservation)                
             };
-            const res = await fetch("https://localhost:44346/api/reservation", requestOptions);
+            const res = await fetch("http://localhost:43023/api/reservation", requestOptions);
             localStorage.activeTab = 1;
             this.$emit('set-as-active-tab', 1);                 
             this.$router.push("/reservations").then(() => { this.$router.go() });                
