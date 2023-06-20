@@ -26,11 +26,31 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+string connectionString = "";
+if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("DB_SERVER")))
+{
+    var dbServer = Environment.GetEnvironmentVariable("DB_SERVER");
+    connectionString = $"Server={dbServer};Database=RoomReservationDb;TrustServerCertificate=True;";
+}
+else
+{
+    connectionString = builder.Configuration.GetConnectionString("RoomReservationDb");
+}
+if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("DB_USER")))
+{
+    var dbUser = Environment.GetEnvironmentVariable("DB_USER");
+    connectionString += $"User Id={dbUser};";
+}
+if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("DB_PASS")))
+{
+    var dbPass = Environment.GetEnvironmentVariable("DB_PASS");
+    connectionString += $"Password={dbPass};";
+}
+
 builder.Services.AddDbContext<MyDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("RoomReservationDb")));
-/*
-if(Environment.GetEnvironmentVariable("DB_PASS"))
-    builder.Services.AddDbContext().*/
+    options.UseSqlServer(connectionString));
+
+//Console.WriteLine(connectionString);
 
 builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddScoped<ILayerService, LayerService>();
